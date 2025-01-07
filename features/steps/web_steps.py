@@ -148,6 +148,12 @@ def step_impl(context, product_name):
     product_names = [product.text for product in product_list]
     assert product_name not in product_names
 
+@then('I should see the message "{message}"')
+def step_impl(context, message):
+    """ Check that the specified message is present somewhere on the page """
+    element = context.driver.find_element(By.TAG_NAME, 'body')
+    assert(message in element.text)
+
 ##################################################################
 # This code works because of the following naming convention:
 # The id field for text input in the html is the element name
