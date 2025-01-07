@@ -69,6 +69,31 @@ Scenario: Delete a Product
     Then I should see the message "Success"
     And I should not see "Shoes" in the "Products List Page"
 
-Scenario: Click the Create button
-    When I press the "Create" button
-    Then I should see "Success" in the "Message" field
+Scenario: Search for products in the "Food" category
+    Given I clear the page
+    And I select "Food" in the "Category" dropdown
+    And I press the "Search" button
+    Then I should see "Big Mac" in the search results
+    And I should not see "Hat" in the search results
+    And I should not see "Shoes" in the search results
+    And I should not see "Sheets" in the search results
+
+Scenario: Search for products based on Availability
+    Given I clear the page
+    And I select "True" in the "Available" dropdown
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should see "Hat" in the search results
+    And I should see "Big Mac" in the search results
+    And I should see "Sheets" in the search results
+    And I should not see "Shoes" in the search results
+
+Scenario: Search for products based on Name
+    Given I clear the page
+    And I set the "Name" to "Big Mac"
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should see "Big Mac" in the search results
+    And I should not see "Hat" in the search results
+    And I should not see "Shoes" in the search results
+    And I should not see "Sheets" in the search results

@@ -115,6 +115,39 @@ def step_impl(context, button_name):
     button.click()
     logging.info('Clicked the "%s" button', button_name)
 
+@when('I clear the page')
+def step_impl(context):
+    """Clear all fields on the page"""
+    clear_button = context.driver.find_element(By.ID, 'clear-btn')
+    clear_button.click()
+
+@when('I select "{category}" in the "{element_name}" dropdown')
+def step_impl(context, category, element_name):
+    """Select a category in the dropdown"""
+    element_id = ID_PREFIX + element_name.lower().replace(' ', '_')
+    category_dropdown = Select(context.driver.find_element(By.ID, element_id))
+    category_dropdown.select_by_visible_text(category)
+
+@when('I press the "Search" button')
+def step_impl(context):
+    """Click the search button to submit the query"""
+    search_button = context.driver.find_element(By.ID, 'search-btn')
+    search_button.click()
+
+@then('I should see "{product_name}" in the search results')
+def step_impl(context, product_name):
+    """Verify that a product appears in the search results"""
+    product_list = context.driver.find_elements(By.CLASS_NAME, 'product_name')
+    product_names = [product.text for product in product_list]
+    assert product_name in product_names
+
+@then('I should not see "{product_name}" in the search results')
+def step_impl(context, product_name):
+    """Verify that a product does not appear in the search results"""
+    product_list = context.driver.find_elements(By.CLASS_NAME, 'product_name')
+    product_names = [product.text for product in product_list]
+    assert product_name not in product_names
+
 ##################################################################
 # This code works because of the following naming convention:
 # The id field for text input in the html is the element name
