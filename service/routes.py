@@ -108,6 +108,44 @@ def list_products():
     results = [product.serialize() for product in products]
     return jsonify(results), status.HTTP_200_OK
 
+@app.route("/products", methods=["GET"])
+def list_products_by_name():
+    """List products by name"""
+    name = request.args.get('name')
+    if not name:
+        abort(status.HTTP_400_BAD_REQUEST, "Name parameter is required")
+
+    app.logger.info("Request to list products with name: %s", name)
+    products = Product.query.filter(Product.name.ilike(f"%{name}%")).all()
+    results = [product.serialize() for product in products]
+    return jsonify(results), status.HTTP_200_OK
+
+
+@app.route("/products", methods=["GET"])
+def list_products_by_category():
+    """List products by category"""
+    category = request.args.get('category')
+    if not category:
+        abort(status.HTTP_400_BAD_REQUEST, "Category parameter is required")
+
+    app.logger.info("Request to list products with category: %s", category)
+    products = Product.query.filter(Product.category.ilike(f"%{category}%")).all()
+    results = [product.serialize() for product in products]
+    return jsonify(results), status.HTTP_200_OK
+
+
+@app.route("/products", methods=["GET"])
+def list_products_by_availability():
+    """List products by availability"""
+    available = request.args.get('available')
+    if available is None:
+        abort(status.HTTP_400_BAD_REQUEST, "Available parameter is required")
+
+    app.logger.info("Request to list products with availability: %s", available)
+    products = Product.query.filter_by(available=available.lower() == 'true').all()
+    results = [product.serialize() for product in products]
+    return jsonify(results), status.HTTP_200_OK
+
 ######################################################################
 # R E A D   A   P R O D U C T
 ######################################################################
